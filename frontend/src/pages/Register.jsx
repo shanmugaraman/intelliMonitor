@@ -4,11 +4,13 @@ import { AuthContext } from '../utils/authContext';
 import { Zap } from 'lucide-react';
 import '../styles/auth.css';
 
-const Login = () => {
+const Register = () => {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState(null);
-  const { login, user } = useContext(AuthContext);
+  const { register, user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,11 +21,14 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (password !== confirmPassword) {
+      return setError('Passwords do not match');
+    }
     try {
-      await login(email, password);
+      await register(name, email, password);
       navigate('/');
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed');
+      setError(err.response?.data?.message || 'Registration failed');
     }
   };
 
@@ -33,12 +38,21 @@ const Login = () => {
         <div className="auth-header">
           <Zap size={40} className="auth-icon" />
           <h1>Intelli Power</h1>
-          <p>Sign in to your account</p>
+          <p>Create your account</p>
         </div>
         
         {error && <div className="error-message">{error}</div>}
         
         <form onSubmit={handleSubmit} className="auth-form">
+          <div className="form-group">
+            <label>Full Name</label>
+            <input 
+              type="text" 
+              value={name} 
+              onChange={(e) => setName(e.target.value)} 
+              required 
+            />
+          </div>
           <div className="form-group">
             <label>Email Address</label>
             <input 
@@ -57,14 +71,23 @@ const Login = () => {
               required 
             />
           </div>
-          <button type="submit" className="login-btn">Sign In</button>
+          <div className="form-group">
+            <label>Confirm Password</label>
+            <input 
+              type="password" 
+              value={confirmPassword} 
+              onChange={(e) => setConfirmPassword(e.target.value)} 
+              required 
+            />
+          </div>
+          <button type="submit" className="login-btn">Sign Up</button>
         </form>
         <div className="auth-footer">
-          <p>Don't have an account? <Link to="/register">Sign Up</Link></p>
+          <p>Already have an account? <Link to="/login">Sign In</Link></p>
         </div>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default Register;

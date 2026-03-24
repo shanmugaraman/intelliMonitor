@@ -116,33 +116,6 @@
   border-bottom: none;
 }
 
-@media (max-width: 768px) {
-  .detail-card {
-    padding: 1.5rem 1rem;
-  }
-  .timer-display {
-    font-size: 2.5rem;
-  }
-  .timer-controls {
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-  .control-btn {
-    width: 100%;
-    padding: 0.75rem;
-  }
-  .detail-info {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-  .modal-content {
-    width: 90%;
-    margin: 1rem;
-    padding: 1.5rem;
-  }
-}
-
-
 .modal-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -170,4 +143,24 @@
   min-height: 100px;
   margin: 1rem 0;
   font-family: inherit;
+}
+
+@media (max-width: 768px) {
+  .detail-card {
+    padding: 1.5rem;
+  }
+
+  .timer-display {
+    font-size: 2.5rem;
+  }
+
+  .detail-info {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .control-btn {
+    padding: 0.6rem 1.5rem;
+    font-size: 0.875rem;
+  }
 }

@@ -35,8 +35,42 @@ const receivePowerAlert = asyncHandler(async (req, res) => {
   res.status(201).json({ message: 'Alert processed and ticket created', ticket });
 });
 
+const createTicket = asyncHandler(async (req, res) => {
+  const { description, location } = req.body;
+
+  if (!description || !location) {
+    res.status(400);
+    throw new Error('Description and Location required');
+  }
+
+  // Find technicians in the area
+  const technicians = await User.find({ role: 'Technician', serviceArea: location });
+  let assignedTo = null;
+  let status = 'OPEN';
+
+  if (technicians.length > 0) {
+    assignedTo = technicians[Math.floor(Math.random() * technicians.length)]._id;
+    status = 'ASSIGNED';
+  }
+
+  const ticket = await Ticket.create({
+    description,
+    location,
+    status,
+    assignedTo,
+    reportedBy: req.user._id
+  });
+
+  res.status(201).json(ticket);
+});
+
 const getAssignedTickets = asyncHandler(async (req, res) => {
   const tickets = await Ticket.find({ assignedTo: req.user._id }).sort({ createdAt: -1 });
+  res.json(tickets);
+});
+
+const getMyTickets = asyncHandler(async (req, res) => {
+  const tickets = await Ticket.find({ reportedBy: req.user._id }).sort({ createdAt: -1 });
   res.json(tickets);
 });
 
@@ -120,4 +154,4 @@ const resolveTicket = asyncHandler(async (req, res) => {
   res.json(ticket);
 });
 
-module.exports = { receivePowerAlert, getAssignedTickets, startWork, stopWork, resolveTicket };
+module.exports = { receivePowerAlert, getAssignedTickets, startWork, stopWork, resolveTicket, createTicket, getMyTickets };

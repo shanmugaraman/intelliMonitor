@@ -1,17 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '../utils/api';
 import '../styles/admin-onboard.css';
 
 const AdminOnboard = () => {
+  const [areas, setAreas] = useState([]);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
-    role: 'Technician',
+    role: 'User',
     serviceArea: ''
   });
   const [message, setMessage] = useState(null);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchAreas = async () => {
+      try {
+        const { data } = await api.get('/area');
+        setAreas(data);
+      } catch (err) {
+        console.error('Failed to fetch areas');
+      }
+    };
+    fetchAreas();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,7 +33,7 @@ const AdminOnboard = () => {
     try {
       await api.post('/admin/create-user', formData);
       setMessage('User created successfully!');
-      setFormData({ name: '', email: '', password: '', role: 'Technician', serviceArea: '' });
+      setFormData({ name: '', email: '', password: '', role: 'User', serviceArea: '' });
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to create user');
     }
@@ -73,18 +86,22 @@ const AdminOnboard = () => {
             >
               <option value="Technician">Technician</option>
               <option value="Admin">Admin</option>
+              <option value="User">User</option>
             </select>
           </div>
           
           {formData.role === 'Technician' && (
             <div className="form-group">
               <label>Service Area (Optional)</label>
-              <input 
-                type="text" 
+              <select 
                 value={formData.serviceArea} 
-                onChange={e => setFormData({...formData, serviceArea: e.target.value})} 
-                placeholder="e.g. Area_A"
-              />
+                onChange={e => setFormData({...formData, serviceArea: e.target.value})}
+              >
+                <option value="">Select Area</option>
+                {areas.map(area => (
+                  <option key={area._id} value={area.name}>{area.name}</option>
+                ))}
+              </select>
             </div>
           )}
           

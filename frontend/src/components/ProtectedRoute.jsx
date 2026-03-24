@@ -1,22 +1,17 @@
-import React, { useContext } from 'react';
+import React, { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
-import { AuthContext } from '../utils/authContext';
+import { useAuth } from '../utils/authContext';
 
-const ProtectedRoute = ({ children, roleRequired }) => {
-  const { user, loading } = useContext(AuthContext);
+export const ProtectedRoute = ({ children, requiredRole }) => {
+  const { user, token } = useAuth();
 
-  if (loading) return <div>Loading...</div>;
-
-  if (!user) {
-    return <Navigate to="/login" replace />;
+  if (!token) {
+    return <Navigate to="/login" />;
   }
 
-  if (roleRequired && user.role !== roleRequired) {
-    // If not correct role, send them to their default landing based on role
-    return <Navigate to="/" replace />;
+  if (requiredRole && user?.role !== requiredRole) {
+    return <Navigate to="/login" />;
   }
 
   return children;
 };
-
-export default ProtectedRoute;

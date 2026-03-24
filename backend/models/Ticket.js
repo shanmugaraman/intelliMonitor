@@ -7,12 +7,17 @@ const workLogSchema = mongoose.Schema({
 });
 
 const ticketSchema = mongoose.Schema({
-  deviceId: { type: String, required: true },
+  deviceId: { type: String, default: 'MANUAL' },
+  description: { type: String, required: true },
   location: { type: String, required: true },
   status: { 
     type: String, 
     enum: ['OPEN', 'ASSIGNED', 'IN_PROGRESS', 'RESOLVED'], 
     default: 'OPEN' 
+  },
+  reportedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
   },
   assignedTo: {
     type: mongoose.Schema.Types.ObjectId,

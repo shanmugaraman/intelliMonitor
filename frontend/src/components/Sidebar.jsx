@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../utils/authContext';
-import { Zap, LayoutDashboard, FileText, UserPlus, LogOut, Wrench } from 'lucide-react';
+import { Zap, LayoutDashboard, FileText, UserPlus, LogOut, Wrench, MapPin } from 'lucide-react';
 import '../styles/app.css';
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
@@ -43,11 +43,20 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             <NavLink to="/onboard" className={({isActive}) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={handleLinkClick}>
               <UserPlus size={20} /> Onboard User
             </NavLink>
+            <NavLink to="/areas" className={({isActive}) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={handleLinkClick}>
+              <MapPin size={20} /> Manage Areas
+            </NavLink>
+          </>
+        ) : user.role === 'Technician' ? (
+          <>
+            <NavLink to="/" className={({isActive}) => `sidebar-link ${isActive ? 'active' : ''}`} end onClick={handleLinkClick}>
+              <Wrench size={20} /> My Tickets
+            </NavLink>
           </>
         ) : (
           <>
             <NavLink to="/" className={({isActive}) => `sidebar-link ${isActive ? 'active' : ''}`} end onClick={handleLinkClick}>
-              <Wrench size={20} /> My Tickets
+              <LayoutDashboard size={20} /> Report Issue
             </NavLink>
           </>
         )}

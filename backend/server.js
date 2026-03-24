@@ -16,10 +16,12 @@ app.use(express.json());
 const authRoutes = require('./routes/authRoutes');
 const ticketRoutes = require('./routes/ticketRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const areaRoutes = require('./routes/areaRoutes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/ticket', ticketRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/area', areaRoutes);
 
 app.get('/', (req, res) => {
   res.send('API is running...');
