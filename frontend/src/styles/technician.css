@@ -1,9 +1,24 @@
 .filter-bar {
   display: flex;
-  gap: 1rem;
+  gap: 0.75rem;
   margin-bottom: 2rem;
   overflow-x: auto;
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.75rem;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.filter-bar::-webkit-scrollbar {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .ticket-card {
+    padding: 1.25rem;
+  }
+  .ticket-location {
+    font-size: 1rem;
+  }
 }
 
 .filter-btn {

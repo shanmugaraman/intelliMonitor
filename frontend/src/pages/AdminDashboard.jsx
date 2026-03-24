@@ -80,7 +80,7 @@ const AdminDashboard = () => {
         </div>
       </div>
       
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
         <div style={{ backgroundColor: 'var(--card-bg)', padding: '1.5rem', borderRadius: '0.75rem', boxShadow: '0 1px 3px 0 rgba(0,0,0,0.1)' }}>
           <h3 style={{ marginBottom: '1rem', fontWeight: 600 }}>Tickets by Status</h3>
           <div style={{ height: 300 }}>
