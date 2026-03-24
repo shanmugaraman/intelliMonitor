@@ -1,0 +1,92 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import api from '../utils/api';
+import { getStatusColor, formatTime } from '../utils/helpers';
+import '../styles/technician.css';
+
+const TechnicianTickets = () => {
+  const [tickets, setTickets] = useState([]);
+  const [filter, setFilter] = useState('ALL');
+  const navigate = useNavigate();
+
+  const fetchTickets = async () => {
+    try {
+      const { data } = await api.get('/ticket/assigned');
+      setTickets(data);
+    } catch (error) {
+      console.error('Failed to fetch assigned tickets', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTickets();
+    const interval = setInterval(fetchTickets, 3000); // Auto-refresh every 3s
+    return () => clearInterval(interval);
+  }, []);
+
+  const filteredTickets = filter === 'ALL' 
+    ? tickets 
+    : tickets.filter(t => t.status === filter);
+
+  // Status counts
+  const counts = {
+    ALL: tickets.length,
+    OPEN: tickets.filter(t => t.status === 'OPEN').length,
+    ASSIGNED: tickets.filter(t => t.status === 'ASSIGNED').length,
+    IN_PROGRESS: tickets.filter(t => t.status === 'IN_PROGRESS').length,
+    RESOLVED: tickets.filter(t => t.status === 'RESOLVED').length,
+  };
+
+  return (
+    <div>
+      <h1 style={{ marginBottom: '1.5rem', fontSize: '1.5rem', fontWeight: 'bold' }}>My Field Tickets</h1>
+      
+      <div className="filter-bar">
+        {Object.keys(counts).map(status => (
+          <button 
+            key={status}
+            className={`filter-btn ${filter === status ? 'active' : ''}`}
+            onClick={() => setFilter(status)}
+          >
+            {status} ({counts[status]})
+          </button>
+        ))}
+      </div>
+
+      <div className="ticket-grid">
+        {filteredTickets.map(ticket => (
+          <div 
+            key={ticket._id} 
+            className="ticket-card"
+            onClick={() => navigate(`/ticket/${ticket._id}`)}
+          >
+            <div className="ticket-header">
+              <span className="ticket-id">#{ticket._id.substring(18)}</span>
+              <span className="status-badge" style={{ backgroundColor: getStatusColor(ticket.status) }}>
+                {ticket.status}
+              </span>
+            </div>
+            
+            <div className="ticket-body">
+              <div className="ticket-location">{ticket.location}</div>
+              <div className="ticket-device">Device: {ticket.deviceId}</div>
+            </div>
+            
+            <div className="ticket-footer">
+              <span>Time: {formatTime(ticket.totalWorkTimeMinutes)}</span>
+              <span style={{ color: 'var(--primary)', fontWeight: 500 }}>View Details &rarr;</span>
+            </div>
+          </div>
+        ))}
+      </div>
+      
+      {filteredTickets.length === 0 && (
+        <div style={{ textAlign: 'center', padding: '3rem', backgroundColor: 'var(--card-bg)', borderRadius: '0.75rem' }}>
+          <h3 style={{ color: 'var(--text-secondary)' }}>No tickets match the selected filter.</h3>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default TechnicianTickets;
