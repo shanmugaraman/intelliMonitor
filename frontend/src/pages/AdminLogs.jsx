@@ -6,22 +6,33 @@ import '../styles/logs.css';
 const AdminLogs = () => {
   const [logs, setLogs] = useState({ tickets: [], alerts: [] });
   const [activeTab, setActiveTab] = useState('tickets');
+  const [lastUpdated, setLastUpdated] = useState(null);
 
   useEffect(() => {
     const fetchLogs = async () => {
       try {
         const { data } = await api.get('/admin/logs');
         setLogs(data);
+        setLastUpdated(new Date());
       } catch (error) {
         console.error('Failed to fetch logs', error);
       }
     };
+
     fetchLogs();
+
+    const interval = setInterval(fetchLogs, 5000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
     <div>
       <h1 style={{ marginBottom: '1.5rem', fontSize: '1.5rem', fontWeight: 'bold' }}>System Logs</h1>
+      {lastUpdated && (
+        <p style={{ marginBottom: '0.75rem', color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
+          Last updated: {formatDate(lastUpdated)}
+        </p>
+      )}
       
       <div className="logs-container">
         <div className="logs-tabs">
@@ -29,13 +40,13 @@ const AdminLogs = () => {
             className={`log-tab ${activeTab === 'tickets' ? 'active' : ''}`}
             onClick={() => setActiveTab('tickets')}
           >
-            Tickets
+            Tickets ({logs.tickets.length})
           </button>
           <button 
             className={`log-tab ${activeTab === 'alerts' ? 'active' : ''}`}
             onClick={() => setActiveTab('alerts')}
           >
-            IoT Alerts
+            IoT Alerts ({logs.alerts.length})
           </button>
         </div>
 

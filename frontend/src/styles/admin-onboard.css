@@ -1,9 +1,15 @@
+.onboard-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
 .onboard-container {
   background-color: var(--card-bg);
   padding: 2rem;
   border-radius: 0.75rem;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-  max-width: 600px;
+  width: 100%;
 }
 
 .onboard-form .form-group {
@@ -32,4 +38,134 @@
   border-radius: 0.375rem;
   margin-bottom: 1.5rem;
   font-weight: 500;
+}
+
+.onboard-users-panel {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  min-height: 340px;
+}
+
+.onboard-users-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.onboard-users-header h2 {
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+
+.onboard-users-header span {
+  background: #eff6ff;
+  color: #2563eb;
+  font-weight: 700;
+  border-radius: 9999px;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.8rem;
+}
+
+.users-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 460px;
+  overflow: auto;
+}
+
+.user-item {
+  border: 1px solid var(--border-color);
+  border-radius: 0.6rem;
+  padding: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.user-main {
+  display: flex;
+  flex-direction: column;
+  min-width: 170px;
+}
+
+.user-main strong {
+  color: var(--text-primary);
+  font-size: 0.92rem;
+}
+
+.user-main span {
+  color: var(--text-secondary);
+  font-size: 0.84rem;
+  word-break: break-word;
+}
+
+.user-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.35rem;
+}
+
+.user-meta small {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+
+.role-pill {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.25rem 0.55rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+}
+
+.role-admin {
+  color: #7c2d12;
+  background: #ffedd5;
+}
+
+.role-technician {
+  color: #1e3a8a;
+  background: #dbeafe;
+}
+
+.role-user {
+  color: #14532d;
+  background: #dcfce7;
+}
+
+.users-empty {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  padding: 1rem 0.25rem;
+}
+
+@media (min-width: 1024px) {
+  .onboard-layout {
+    grid-template-columns: minmax(340px, 1fr) minmax(320px, 420px);
+    align-items: start;
+  }
+}
+
+@media (max-width: 768px) {
+  .onboard-container {
+    padding: 1rem;
+  }
+
+  .onboard-users-panel {
+    padding: 0.85rem;
+  }
+
+  .user-item {
+    padding: 0.65rem;
+  }
+
+  .user-meta {
+    align-items: flex-start;
+  }
 }

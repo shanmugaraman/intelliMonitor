@@ -1,20 +1,21 @@
 {
-  "short_name": "Intelli Power",
   "name": "Intelli Power Monitor",
+  "short_name": "IntelliPower",
+  "description": "IoT power outage monitoring and ticket workflow",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f6f7fb",
+  "theme_color": "#ff6b6b",
   "icons": [
     {
-      "src": "/vite.svg",
-      "type": "image/svg+xml",
-      "sizes": "192x192"
+      "src": "/favicon.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
     },
     {
-      "src": "/vite.svg",
-      "type": "image/svg+xml",
-      "sizes": "512x512"
+      "src": "/icons.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
     }
-  ],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff"
+  ]
 }

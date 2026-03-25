@@ -14,6 +14,15 @@
   --white: #ffffff;
   --dark: #333333;
   --border: #e0e0e0;
+
+  /* Shared app tokens used across page-level CSS files */
+  --bg-color: #f6f7fb;
+  --card-bg: #ffffff;
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --border-color: #e5e7eb;
+  --green: #10b981;
+  --yellow: #f59e0b;
 }
 
 body {

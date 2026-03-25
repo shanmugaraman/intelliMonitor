@@ -24,6 +24,7 @@ const receivePowerAlert = asyncHandler(async (req, res) => {
 
   const ticket = await Ticket.create({
     deviceId,
+    description: `Power alert from ${deviceId} at ${location}`,
     location,
     status,
     assignedTo

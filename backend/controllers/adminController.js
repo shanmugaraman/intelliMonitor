@@ -33,6 +33,11 @@ const createUser = asyncHandler(async (req, res) => {
   }
 });
 
+const getUsers = asyncHandler(async (req, res) => {
+  const users = await User.find({}).select('-password').sort({ createdAt: -1 });
+  res.json(users);
+});
+
 const getAnalytics = asyncHandler(async (req, res) => {
   const totalTickets = await Ticket.countDocuments();
   const activeTickets = await Ticket.countDocuments({ status: { $ne: 'RESOLVED' } });
@@ -48,44 +53,11 @@ const getAnalytics = asyncHandler(async (req, res) => {
   });
   const avgResolutionTimeHours = resolved.length > 0 ? (totalTime / resolved.length / (1000 * 60 * 60)).toFixed(2) : 0;
 
-  // Recent Tickets
-  const recentTickets = await Ticket.find({})
-    .populate('assignedTo', 'name')
-    .sort({ createdAt: -1 })
-    .limit(5);
-
-  // Area stats
-  const areaStats = await Ticket.aggregate([
-    { $group: { _id: '$location', count: { $sum: 1 } } },
-    { $sort: { count: -1 } }
-  ]);
-
-  // Tech stats (Top 5)
-  const techStats = await Ticket.aggregate([
-    { $match: { assignedTo: { $exists: true, $ne: null } } },
-    { $group: { _id: '$assignedTo', count: { $sum: 1 } } },
-    { $sort: { count: -1 } },
-    { $limit: 5 },
-    {
-      $lookup: {
-        from: 'users',
-        localField: '_id',
-        foreignField: '_id',
-        as: 'user'
-      }
-    },
-    { $unwind: '$user' },
-    { $project: { name: '$user.name', count: 1 } }
-  ]);
-
   res.json({
     totalTickets,
     activeTickets,
     resolvedTickets,
-    avgResolutionTimeHours,
-    recentTickets,
-    areaStats,
-    techStats
+    avgResolutionTimeHours
   });
 });
 
@@ -96,4 +68,4 @@ const getLogs = asyncHandler(async (req, res) => {
   res.json({ tickets, alerts });
 });
 
-module.exports = { createUser, getAnalytics, getLogs };
+module.exports = { createUser, getUsers, getAnalytics, getLogs };

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../utils/api';
 import { getStatusColor, formatTime } from '../utils/helpers';
-import { Clock, Filter, CheckCircle, Activity, AlertCircle } from 'lucide-react';
 import '../styles/technician.css';
 
 const TechnicianTickets = () => {
@@ -43,30 +42,15 @@ const TechnicianTickets = () => {
       <h1 style={{ marginBottom: '1.5rem', fontSize: '1.5rem', fontWeight: 'bold' }}>My Field Tickets</h1>
       
       <div className="filter-bar">
-        <button 
-          className={`filter-btn ${filter === 'ALL' ? 'active' : ''}`}
-          onClick={() => setFilter('ALL')}
-        >
-          <Filter size={16} /> ALL ({counts.ALL})
-        </button>
-        <button 
-          className={`filter-btn ${filter === 'OPEN' ? 'active' : ''}`}
-          onClick={() => setFilter('OPEN')}
-        >
-          <AlertCircle size={16} /> OPEN ({counts.OPEN})
-        </button>
-        <button 
-          className={`filter-btn ${filter === 'IN_PROGRESS' ? 'active' : ''}`}
-          onClick={() => setFilter('IN_PROGRESS')}
-        >
-          <Activity size={16} /> WORKING ({counts.IN_PROGRESS})
-        </button>
-        <button 
-          className={`filter-btn ${filter === 'RESOLVED' ? 'active' : ''}`}
-          onClick={() => setFilter('RESOLVED')}
-        >
-          <CheckCircle size={16} /> DONE ({counts.RESOLVED})
-        </button>
+        {Object.keys(counts).map(status => (
+          <button 
+            key={status}
+            className={`filter-btn ${filter === status ? 'active' : ''}`}
+            onClick={() => setFilter(status)}
+          >
+            {status} ({counts[status]})
+          </button>
+        ))}
       </div>
 
       <div className="ticket-grid">
@@ -85,20 +69,12 @@ const TechnicianTickets = () => {
             
             <div className="ticket-body">
               <div className="ticket-location">{ticket.location}</div>
-              <div className="ticket-device" style={{ marginBottom: '0.5rem' }}>
-                {ticket.deviceId ? `Device: ${ticket.deviceId}` : 'Manual Report'}
-              </div>
-              <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                {ticket.description}
-              </div>
+              <div className="ticket-device">Device: {ticket.deviceId}</div>
             </div>
             
             <div className="ticket-footer">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Clock size={14} />
-                <span>{formatTime(ticket.totalWorkTimeMinutes)}</span>
-              </div>
-              <span style={{ color: 'var(--primary)', fontWeight: 600 }}>Action &rarr;</span>
+              <span>Time: {formatTime(ticket.totalWorkTimeMinutes)}</span>
+              <span style={{ color: 'var(--primary)', fontWeight: 500 }}>View Details &rarr;</span>
             </div>
           </div>
         ))}
